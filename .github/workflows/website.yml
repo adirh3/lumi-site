@@ -25,9 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: website
-      url: ${{ steps.deploy.outputs.static_web_app_url }}
+      url: ${{ steps.production.outputs.static_web_app_url || steps.preview.outputs.static_web_app_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
@@ -39,8 +39,9 @@ jobs:
             exit 1
           fi
 
-      - name: Deploy
-        id: deploy
+      - name: Deploy to production
+        id: production
+        if: inputs.target == 'production'
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
@@ -48,5 +49,17 @@ jobs:
           app_location: site
           output_location: ''
           skip_app_build: true
-          skip_api_build: true
-          deployment_environment: ${{ inputs.target == 'preview' && 'preview' || '' }}
+
+      # deployment_environment isn't listed in the action's metadata, so the log warns about an
+      # unexpected input, but Azure deploys to the named preview environment.
+      - name: Deploy to preview
+        id: preview
+        if: inputs.target == 'preview'
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: upload
+          app_location: site
+          output_location: ''
+          skip_app_build: true
+          deployment_environment: preview
