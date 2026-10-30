@@ -74,8 +74,9 @@
   }
 
   // The hero's window plays a real recorded run on a loop, over its still first frame. It loads after the
-  // page, only when motion is welcome (no reduced-motion or Save-Data preference), and plays from a blob so
-  // looping never depends on the server's range support. It pauses off screen and has a Pause button.
+  // page and plays from a blob so looping never depends on the server's range support. It pauses off
+  // screen and has a Pause button. When motion isn't welcome (a reduced-motion or Save-Data preference)
+  // or the browser blocks autoplay, the still stays and the same button offers to play the run instead.
   const LOOP_SOURCES = {
     1980: [['video/webm; codecs="av01.0.12M.08"', "webm"], ['video/mp4; codecs="avc1.640032"', "mp4"]],
     1320: [['video/webm; codecs="av01.0.08M.08"', "webm"], ['video/mp4; codecs="avc1.640032"', "mp4"]],
@@ -95,17 +96,31 @@
     let generation = 0;
     let paused = false;
     let visible = true;
+    // Set once the visitor presses Play, which overrides a reduced-motion or Save-Data preference.
+    let chosen = false;
+
+    const showState = (value) => {
+      paused = value;
+      toggle.dataset.state = value ? "paused" : "playing";
+      label.textContent = value ? "Play" : "Pause";
+    };
+
+    // Play over the still; nothing moves or downloads until it's pressed.
+    const offer = () => {
+      showState(true);
+      toggle.hidden = false;
+    };
 
     const sync = () => {
       if (!video) return;
       if (paused || !visible) video.pause();
-      else video.play().catch(() => {});
+      else video.play().catch((error) => {
+        if (error && error.name === "NotAllowedError") offer();
+      });
     };
 
     const setPaused = (value) => {
-      paused = value;
-      toggle.dataset.state = value ? "paused" : "playing";
-      label.textContent = value ? "Play" : "Pause";
+      showState(value);
       hero.classList.toggle("is-paused", value);
       sync();
     };
@@ -116,7 +131,6 @@
       video = null;
       objectUrl = null;
       frame.classList.remove("is-playing");
-      toggle.hidden = true;
     };
 
     // Sources this browser says it plays, best first. A browser can still fail to decode one, so each is
@@ -169,15 +183,27 @@
     const build = async () => {
       const token = ++generation;
       teardown();
-      if (reduce.matches || saveData) return;
+      if (!chosen && (reduce.matches || saveData)) {
+        offer();
+        return;
+      }
       for (const url of candidates()) {
         if (await attempt(url, token)) return;
         if (token !== generation) return;
       }
       teardown();
+      toggle.hidden = true;
     };
 
-    toggle.addEventListener("click", () => setPaused(!paused));
+    toggle.addEventListener("click", () => {
+      if (!video && paused && !chosen) {
+        chosen = true;
+        setPaused(false);
+        build();
+      } else {
+        setPaused(!paused);
+      }
+    });
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(([entry]) => {
         visible = entry.isIntersecting;

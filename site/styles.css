@@ -585,7 +585,8 @@ p {
 }
 
 .loop-toggle:hover,
-.loop-toggle:focus-visible {
+.loop-toggle:focus-visible,
+.loop-toggle[data-state="paused"] {
   opacity: 1;
   background: rgba(14, 14, 18, 0.78);
 }

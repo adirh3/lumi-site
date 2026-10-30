@@ -48,7 +48,10 @@ the question being typed and the work behind it. The waits are shortened and the
 says it's sped up. The dark and light versions are two separate runs of the same question.
 
 - The still under it (`assets/img/hero-{dark,light}-*.webp`) is the loop's first frame, so nothing jumps
-  when the loop starts; visitors who prefer reduced motion or have Save-Data on see only the still.
+  when the loop starts. Visitors who prefer reduced motion or have Save-Data on, and browsers that block
+  autoplay, get the still with a Play button instead; nothing downloads until it's pressed. (Windows
+  reports reduced motion when animations are off, which Remote Desktop sessions often do; a browser
+  started while they were off can keep reporting it until it restarts.)
 - It loads after the page, plays muted, pauses when scrolled out of view and has a Pause button. It's
   fetched once and played from a `blob:` URL, so seeking and looping never depend on the host supporting
   HTTP range requests (Safari won't play video from a host without them); that's why the CSP allows
