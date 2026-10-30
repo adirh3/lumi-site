@@ -119,15 +119,11 @@
         </div>
         <p class="download-note" data-download-note>Windows, macOS and Linux · Self-contained, no .NET install needed</p>
 
-        <nav class="platform-links" aria-label="Downloads for every platform">
-          <a href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-win-Setup.exe" data-platform="windows">Windows</a>
-          <a href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-win-arm64-Setup.exe" data-platform="win-arm">Windows ARM64</a>
-          <a href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-osx-arm64-Setup.pkg" data-platform="mac-arm">macOS Apple silicon</a>
-          <a href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-osx-x64-Setup.pkg" data-platform="mac-intel">macOS Intel</a>
-          <a href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi.AppImage" data-platform="linux">Linux</a>
-          <a href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-linux-arm64.AppImage" data-platform="linux-arm">Linux ARM64</a>
-          <a href="https://github.com/adirh3/Lumi/releases/latest" data-platform="android">Android app</a>
-          <a href="#download">All options</a>
+        <nav class="platform-links" aria-label="Downloads by platform">
+          <a href="#download-windows" data-platform="windows">Windows</a>
+          <a href="#download-macos" data-platform="mac">macOS</a>
+          <a href="#download-linux" data-platform="linux">Linux</a>
+          <a href="#download-phone" data-platform="phone">Phone</a>
         </nav>
 
         <p class="requirements">Runs on Windows and Linux (x64 or ARM64) and macOS (Apple silicon or Intel). Bring an AI account: GitHub Copilot, a ChatGPT plan, an API key or a local model.</p>
@@ -244,10 +240,10 @@
           <h2 id="accounts-title">A free app. Your AI account.</h2>
           <p>Lumi is free and open source under the MIT license. The AI comes from the account you connect, and that provider's plans, limits and charges apply.</p>
           <ul class="routes" role="list">
-            <li><strong>GitHub Copilot</strong><span>Built in. Models and limits follow your Copilot plan.</span></li>
-            <li><strong>ChatGPT plan</strong><span>Sign in with an eligible plan, such as Plus or Pro. No API key.</span></li>
-            <li><strong>API providers</strong><span>OpenRouter, Microsoft Foundry and others, with your own key or sign-in, billed by the provider.</span></li>
-            <li><strong>Local models</strong><span>Ollama, LM Studio or another server you run, with a model that supports tools.</span></li>
+            <li><strong>GitHub Copilot</strong> <span>Built in. Models and limits follow your Copilot plan.</span></li>
+            <li><strong>ChatGPT plan</strong> <span>Sign in with an eligible plan, such as Plus or Pro. No API key.</span></li>
+            <li><strong>API providers</strong> <span>OpenRouter, Microsoft Foundry and others, with your own key or sign-in, billed by the provider.</span></li>
+            <li><strong>Local models</strong> <span>Ollama, LM Studio or another server you run, with a model that supports tools.</span></li>
           </ul>
           <p class="fine">Whichever model you choose, the <a href="https://github.com/github/copilot-sdk">GitHub Copilot SDK</a> runtime runs the agent. Chats stay on your computer; model requests and connectors send context to the services you use.</p>
         </div>
@@ -274,68 +270,49 @@
         </div>
 
         <ul class="platforms reveal" role="list">
-          <li class="platform" data-platform-card="windows">
+          <li class="platform" id="download-windows" data-platform-card="windows">
             <div class="platform-head">
               <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M9 20h6M12 16v4"/></svg>
-              <div><h3>Windows</h3><p>x64 (Intel or AMD)</p></div>
+              <div><h3>Windows</h3><p>Installer (.exe)</p></div>
             </div>
-            <a class="btn btn-secondary btn-block" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-win-Setup.exe">Installer (.exe)</a>
-            <a class="platform-alt" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-win-Portable.zip">Portable .zip</a>
-          </li>
-          <li class="platform" data-platform-card="win-arm">
-            <div class="platform-head">
-              <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M9 20h6M12 16v4"/></svg>
-              <div><h3>Windows</h3><p>ARM64 (Snapdragon and other Arm PCs)</p></div>
+            <div class="choices">
+              <a class="choice" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-win-Setup.exe" data-choice="windows"><strong><span class="sr-only">Windows </span>x64</strong> <span>Intel or AMD</span></a>
+              <a class="choice" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-win-arm64-Setup.exe" data-choice="win-arm"><strong><span class="sr-only">Windows </span>ARM64</strong> <span>Snapdragon and other Arm</span></a>
             </div>
-            <a class="btn btn-secondary btn-block" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-win-arm64-Setup.exe">Installer (.exe)</a>
-            <a class="platform-alt" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-win-arm64-Portable.zip">Portable .zip</a>
+            <p class="platform-alt">Portable .zip: <a href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-win-Portable.zip" aria-label="Windows portable .zip, x64">x64</a> · <a href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-win-arm64-Portable.zip" aria-label="Windows portable .zip, ARM64">ARM64</a></p>
           </li>
-          <li class="platform" data-platform-card="mac-arm">
+          <li class="platform" id="download-macos" data-platform-card="mac">
             <div class="platform-head">
               <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M2 19h20"/></svg>
-              <div><h3>macOS</h3><p>Apple silicon (M-series)</p></div>
+              <div><h3>macOS</h3><p>Installer (.pkg)</p></div>
             </div>
-            <a class="btn btn-secondary btn-block" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-osx-arm64-Setup.pkg">Installer (.pkg)</a>
+            <div class="choices">
+              <a class="choice" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-osx-arm64-Setup.pkg" data-choice="mac-arm"><strong><span class="sr-only">macOS </span>Apple silicon</strong> <span>M1 and later</span></a>
+              <a class="choice" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-osx-x64-Setup.pkg" data-choice="mac-intel"><strong><span class="sr-only">macOS </span>Intel</strong> <span>Intel-based Macs</span></a>
+            </div>
             <a class="platform-alt" href="https://github.com/adirh3/Lumi#macos">First-launch steps</a>
           </li>
-          <li class="platform" data-platform-card="mac-intel">
-            <div class="platform-head">
-              <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M2 19h20"/></svg>
-              <div><h3>macOS</h3><p>Intel</p></div>
-            </div>
-            <a class="btn btn-secondary btn-block" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-osx-x64-Setup.pkg">Installer (.pkg)</a>
-            <a class="platform-alt" href="https://github.com/adirh3/Lumi#macos">First-launch steps</a>
-          </li>
-          <li class="platform" data-platform-card="linux">
+          <li class="platform" id="download-linux" data-platform-card="linux">
             <div class="platform-head">
               <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M7 8l3 2-3 2M12 12h4"/></svg>
-              <div><h3>Linux</h3><p>x64 (x86_64)</p></div>
+              <div><h3>Linux</h3><p>AppImage</p></div>
             </div>
-            <a class="btn btn-secondary btn-block" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi.AppImage">AppImage</a>
+            <div class="choices">
+              <a class="choice" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi.AppImage" data-choice="linux"><strong><span class="sr-only">Linux </span>x64</strong> <span>x86_64</span></a>
+              <a class="choice" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-linux-arm64.AppImage" data-choice="linux-arm"><strong><span class="sr-only">Linux </span>ARM64</strong> <span>aarch64</span></a>
+            </div>
             <a class="platform-alt" href="https://github.com/adirh3/Lumi/releases/latest">Portable .tar.gz on the release page</a>
           </li>
-          <li class="platform" data-platform-card="linux-arm">
-            <div class="platform-head">
-              <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M7 8l3 2-3 2M12 12h4"/></svg>
-              <div><h3>Linux</h3><p>ARM64 (aarch64)</p></div>
-            </div>
-            <a class="btn btn-secondary btn-block" href="https://github.com/adirh3/Lumi/releases/latest/download/Lumi-linux-arm64.AppImage">AppImage</a>
-            <a class="platform-alt" href="https://github.com/adirh3/Lumi/releases/latest">Portable .tar.gz on the release page</a>
-          </li>
-          <li class="platform" data-platform-card="android">
+          <li class="platform" id="download-phone" data-platform-card="phone">
             <div class="platform-head">
               <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>
-              <div><h3>Android</h3><p>Companion app · ARM64</p></div>
+              <div><h3>Phone</h3><p>Pairs with your computer</p></div>
             </div>
-            <a class="btn btn-secondary btn-block" href="https://github.com/adirh3/Lumi/releases/latest">APK on the release page</a>
-            <span class="platform-alt">Pairs with Lumi on your computer</span>
-          </li>
-          <li class="platform" data-platform-card="ios">
-            <div class="platform-head">
-              <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>
-              <div><h3>iPhone</h3><p>Mobile web app</p></div>
+            <div class="choices">
+              <a class="choice" href="https://github.com/adirh3/Lumi/releases/latest" data-choice="android"><strong>Android</strong> <span>APK on the release page</span></a>
+              <a class="choice" href="https://github.com/adirh3/Lumi#mobile-conversations" data-choice="ios"><strong>iPhone</strong> <span>Mobile web app</span></a>
             </div>
-            <p class="platform-text">No download: in Lumi on your computer, open Settings → Mobile, then add the web app to your Home Screen from Safari.</p>
+            <p class="platform-alt">Set up in Lumi: Settings → Mobile</p>
           </li>
         </ul>
 

@@ -10,12 +10,18 @@
   const TARGETS = {
     windows: { label: "Download for Windows", note: "Windows x64 installer · No .NET install needed", href: `${ASSET}/Lumi-win-Setup.exe` },
     "win-arm": { label: "Download for Windows", note: "Windows ARM64 installer · No .NET install needed", href: `${ASSET}/Lumi-win-arm64-Setup.exe` },
-    "mac-arm": { label: "Download for Mac", note: "Apple silicon installer (.pkg) · Intel Mac? See macOS Intel below", href: `${ASSET}/Lumi-osx-arm64-Setup.pkg` },
-    "mac-intel": { label: "Download for Mac", note: "Intel installer (.pkg) · Apple silicon? See macOS Apple silicon below", href: `${ASSET}/Lumi-osx-x64-Setup.pkg` },
+    "mac-arm": { label: "Download for Mac", note: "Apple silicon installer (.pkg) · Intel Mac? Choose Intel under macOS below", href: `${ASSET}/Lumi-osx-arm64-Setup.pkg` },
+    "mac-intel": { label: "Download for Mac", note: "Intel installer (.pkg) · Apple silicon Mac? Choose it under macOS below", href: `${ASSET}/Lumi-osx-x64-Setup.pkg` },
     linux: { label: "Download for Linux", note: "x64 AppImage · Portable archive on the release page", href: `${ASSET}/Lumi.AppImage` },
     "linux-arm": { label: "Download for Linux", note: "ARM64 AppImage · Portable archive on the release page", href: `${ASSET}/Lumi-linux-arm64.AppImage` },
     android: { label: "See desktop downloads", note: "Lumi runs on your computer; the Android app pairs with it", href: "#download" },
     ios: { label: "See desktop downloads", note: "Lumi runs on your computer; iPhone uses the mobile web app", href: "#download" },
+  };
+
+  // The platform card each build is offered in.
+  const PLATFORM = {
+    windows: "windows", "win-arm": "windows", "mac-arm": "mac", "mac-intel": "mac",
+    linux: "linux", "linux-arm": "linux", android: "phone", ios: "phone",
   };
 
   function detectOs() {
@@ -81,12 +87,15 @@
     document.querySelectorAll("[data-download-note]").forEach((note) => {
       note.textContent = target.note;
     });
-    document.querySelectorAll("[data-platform]").forEach((link) => {
-      if (link.dataset.platform === key) link.setAttribute("aria-current", "true");
-      else link.removeAttribute("aria-current");
-    });
+    const platform = PLATFORM[key];
+    const mark = (element, current) => {
+      if (current) element.setAttribute("aria-current", "true");
+      else element.removeAttribute("aria-current");
+    };
+    document.querySelectorAll("[data-platform]").forEach((link) => mark(link, link.dataset.platform === platform));
+    document.querySelectorAll("[data-choice]").forEach((choice) => mark(choice, choice.dataset.choice === key));
     document.querySelectorAll("[data-platform-card]").forEach((card) => {
-      card.classList.toggle("is-detected", card.dataset.platformCard === key);
+      card.classList.toggle("is-detected", card.dataset.platformCard === platform);
     });
   }
 
