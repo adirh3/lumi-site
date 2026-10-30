@@ -25,16 +25,16 @@ python -m http.server 8080 --directory site
 
 ## 1. Set the site URL
 
-The domain isn't chosen yet, so the page uses the placeholder `https://lumi-site.example`. It appears
-only in the **SITE URL** block at the top of `index.html` (canonical link, `og:url`, `og:image`,
-`twitter:image`); social networks need those to be absolute. Replace it once the domain is final, for
-example:
+The site lives at `https://letlumi.com` (registered at Porkbun, which also hosts its DNS). The address
+appears only in the **SITE URL** block at the top of `index.html` (canonical link, `og:url`, `og:image`,
+`twitter:image`); social networks need those to be absolute. To move the site to another address,
+replace it there, for example:
 
 ```powershell
-$domain = 'https://lumi.example.dev'   # the final address, without a trailing slash
-(Get-Content site\index.html -Raw).Replace('https://lumi-site.example', $domain) |
+$domain = 'https://new.example'   # the new address, without a trailing slash
+(Get-Content site\index.html -Raw).Replace('https://letlumi.com', $domain) |
   Set-Content site\index.html -NoNewline -Encoding utf8
-Select-String -Path site\index.html -Pattern 'lumi-site.example'   # should print nothing
+Select-String -Path site\index.html -Pattern 'letlumi\.com'   # should print nothing
 ```
 
 ## 2. The hero loop
@@ -151,9 +151,9 @@ Remove-Item Env:SWA_CLI_DEPLOYMENT_TOKEN
 ## 5. Add the custom domain
 
 Use the apex (`example.dev`) as the address and `www` as a redirect to it; the Free plan allows exactly
-these two. The registrar must support **ALIAS** (or ANAME/CNAME flattening) at the apex so visitors
-reach the global edge: Porkbun does, and Azure DNS does with an alias record. An A record would serve
-from a single region instead.
+these two. For Lumi that's `letlumi.com`, with `www.letlumi.com` redirecting to it. The registrar must
+support **ALIAS** (or ANAME/CNAME flattening) at the apex so visitors reach the global edge: Porkbun
+does, and Azure DNS does with an alias record. An A record would serve from a single region instead.
 
 1. In the static web app → **Custom domains** → Add → Custom domain on other DNS:
    - `www.example.dev`, hostname record type **CNAME**;
