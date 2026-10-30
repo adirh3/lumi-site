@@ -424,9 +424,20 @@ p {
   filter: drop-shadow(0 12px 30px rgba(124, 92, 240, 0.45));
 }
 
+.tagline {
+  margin-top: 20px;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.4vw, 38px);
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--text);
+  text-wrap: balance;
+}
+
 .lead {
   max-width: 720px;
-  margin-top: 22px;
+  margin-top: 16px;
   font-size: clamp(18px, 2.1vw, 22px);
   line-height: 1.5;
   color: var(--text-on-glow);

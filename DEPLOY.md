@@ -42,10 +42,12 @@ Select-String -Path site\index.html -Pattern 'letlumi\.com'   # should print not
 The window at the top plays a real Lumi run on a loop: in a sample project (`checkout-api`, a small
 ASP.NET Core API with synthetic request logs and git history, in an isolated Debug profile), Lumi is asked
 why checkout got slower. It reads the logs and the history, finds the commit that made checkout call the
-pricing service once per cart item, and answers with a daily latency chart, a flowchart of the slow path
-and a fix checklist, using GPT-6 Luna. The loop opens on the chart, scrolls through the answer, then shows
-the question being typed and the work behind it. The waits are shortened and the caption under the window
-says it's sped up. The dark and light versions are two separate runs of the same question.
+pricing service once per cart item, and answers with a daily latency chart, a diagram of the slow path
+and a fix checklist, using GPT-6 Luna. The loop opens on the chart and scrolls through the answer, then
+starts over the way a user does: a new chat, with the question typed on its welcome screen, and the work
+behind the answer. Lumi names the chat itself after the first message. The waits are shortened and the
+caption under the window says it's sped up. The dark and light versions are two separate runs of the same
+question, so their answers and diagrams differ.
 
 - The still under it (`assets/img/hero-{dark,light}-*.webp`) is the loop's first frame, so nothing jumps
   when the loop starts. Visitors who prefer reduced motion or have Save-Data on, and browsers that block
