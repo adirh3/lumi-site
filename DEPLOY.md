@@ -203,8 +203,10 @@ record pointing at the static web app. It offers only .com, .net, .org, .biz, .c
 - **Caching:** files under `assets/` are cached for a day, CSS and JS for an hour. When replacing an
   image after launch, a new file name shows it to everyone at once.
 - **Download links** use GitHub's `releases/latest/download/<file>` URLs, so they follow each new
-  release as long as the asset names stay the same. The Android APK and Linux portable archive have
-  versions in their names, so those link to the latest release page.
+  release as long as the asset names stay the same. The Android APK and the Linux portable archives have
+  versions in their names, so those link to the latest release page. The Windows and Linux ARM64 links
+  (`Lumi-win-arm64-Setup.exe`, `Lumi-win-arm64-Portable.zip`, `Lumi-linux-arm64.AppImage`) work only once
+  a release with ARM64 builds is out: check them before deploying to production.
 - **Screenshots and the hero loop** were captured from a Debug build of Lumi at commit `22c2feec`, in an
   isolated profile ("Alex" is a placeholder user). The runs are real, with GPT-6 Luna: the hero loop
   investigates a slowdown in a small sample API (`checkout-api`), and the steps shown under "Hand it a task"

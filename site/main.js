@@ -9,9 +9,11 @@
 
   const TARGETS = {
     windows: { label: "Download for Windows", note: "Windows x64 installer · No .NET install needed", href: `${ASSET}/Lumi-win-Setup.exe` },
+    "win-arm": { label: "Download for Windows", note: "Windows ARM64 installer · No .NET install needed", href: `${ASSET}/Lumi-win-arm64-Setup.exe` },
     "mac-arm": { label: "Download for Mac", note: "Apple silicon installer (.pkg) · Intel Mac? See macOS Intel below", href: `${ASSET}/Lumi-osx-arm64-Setup.pkg` },
     "mac-intel": { label: "Download for Mac", note: "Intel installer (.pkg) · Apple silicon? See macOS Apple silicon below", href: `${ASSET}/Lumi-osx-x64-Setup.pkg` },
     linux: { label: "Download for Linux", note: "x64 AppImage · Portable archive on the release page", href: `${ASSET}/Lumi.AppImage` },
+    "linux-arm": { label: "Download for Linux", note: "ARM64 AppImage · Portable archive on the release page", href: `${ASSET}/Lumi-linux-arm64.AppImage` },
     android: { label: "See desktop downloads", note: "Lumi runs on your computer; the Android app pairs with it", href: "#download" },
     ios: { label: "See desktop downloads", note: "Lumi runs on your computer; iPhone uses the mobile web app", href: "#download" },
   };
@@ -28,19 +30,27 @@
     return null;
   }
 
-  // Browsers can't always tell Apple silicon from Intel. Chromium reports the architecture; elsewhere
-  // the GPU name is a fair hint. When unsure, Apple silicon (every current Mac); Intel stays one tap away.
-  async function detectMacArch() {
+  // Chromium reports the processor architecture; other browsers don't.
+  async function reportedArch() {
     try {
       const data = navigator.userAgentData;
       if (data && data.getHighEntropyValues) {
-        const { architecture } = await data.getHighEntropyValues(["architecture"]);
-        if (architecture === "arm") return "mac-arm";
-        if (architecture === "x86") return "mac-intel";
+        const { architecture, bitness } = await data.getHighEntropyValues(["architecture", "bitness"]);
+        if (architecture === "arm") return bitness === "32" ? "arm32" : "arm64";
+        if (architecture === "x86") return bitness === "32" ? "x86" : "x64";
       }
     } catch {
-      /* fall through to the GPU hint */
+      /* not reported */
     }
+    return null;
+  }
+
+  // Browsers can't always tell Apple silicon from Intel. Chromium reports the architecture; elsewhere
+  // the GPU name is a fair hint. When unsure, Apple silicon (every current Mac); Intel stays one tap away.
+  async function detectMacArch() {
+    const arch = await reportedArch();
+    if (arch === "arm64" || arch === "arm32") return "mac-arm";
+    if (arch === "x64" || arch === "x86") return "mac-intel";
     try {
       const gl = document.createElement("canvas").getContext("webgl");
       const renderer = gl ? String(gl.getParameter(gl.RENDERER) || "") : "";
@@ -49,6 +59,15 @@
       /* no WebGL: keep the default */
     }
     return "mac-arm";
+  }
+
+  // Windows and Linux builds come for x64 and ARM64. Firefox on Linux names the processor in
+  // navigator.platform ("Linux aarch64"); when nothing says Arm, x64, with ARM64 one tap away.
+  async function detectArmBuild(os) {
+    const arch = await reportedArch();
+    const named = !arch && /aarch64|arm64/i.test(`${navigator.platform || ""} ${navigator.userAgent || ""}`);
+    if (arch !== "arm64" && !named) return os;
+    return os === "windows" ? "win-arm" : "linux-arm";
   }
 
   function applyTarget(key) {
@@ -62,15 +81,28 @@
     document.querySelectorAll("[data-download-note]").forEach((note) => {
       note.textContent = target.note;
     });
-    document.querySelectorAll(`[data-platform="${key}"]`).forEach((link) => link.setAttribute("aria-current", "true"));
-    const card = document.querySelector(`[data-platform-card="${key}"]`);
-    if (card) card.classList.add("is-detected");
+    document.querySelectorAll("[data-platform]").forEach((link) => {
+      if (link.dataset.platform === key) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
+    });
+    document.querySelectorAll("[data-platform-card]").forEach((card) => {
+      card.classList.toggle("is-detected", card.dataset.platformCard === key);
+    });
   }
 
   async function setUpDownloads() {
     const os = detectOs();
     if (!os) return;
-    applyTarget(os === "mac" ? await detectMacArch() : os);
+    if (os === "mac") {
+      applyTarget(await detectMacArch());
+      return;
+    }
+    // x64 right away; the browser's answer about the processor can switch it to ARM64.
+    applyTarget(os);
+    if (os === "windows" || os === "linux") {
+      const build = await detectArmBuild(os);
+      if (build !== os) applyTarget(build);
+    }
   }
 
   // The hero's window plays a real recorded run on a loop, over its still first frame. It loads after the

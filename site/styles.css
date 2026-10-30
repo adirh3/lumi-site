@@ -457,7 +457,7 @@ p {
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  max-width: 720px;
+  max-width: 960px;
   margin-top: 20px;
   font-size: 14px;
 }
@@ -814,7 +814,7 @@ p {
 
 .platforms {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
   margin: 0;
   padding: 0;
@@ -866,6 +866,7 @@ p {
 .platform-head p {
   color: var(--text-3);
   font-size: 14px;
+  text-wrap: balance;
 }
 
 .platform-icon {
@@ -1284,6 +1285,13 @@ a.platform-alt {
   }
 }
 
+/* Four download cards across leave room for the "Your device" badge only on wide screens. */
+@media (max-width: 1180px) {
+  .platforms {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 1000px) {
   .feature,
   .feature-phone,
@@ -1305,10 +1313,6 @@ a.platform-alt {
 
   .accounts-shot {
     justify-self: center;
-  }
-
-  .platforms {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
