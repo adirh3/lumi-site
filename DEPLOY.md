@@ -4,8 +4,9 @@ The public one-page site for [Lumi](https://github.com/adirh3/Lumi). Static file
 framework, cookies, analytics or third-party requests.
 
 ```text
-README.md, DEPLOY.md, LICENSE
+README.md, DEPLOY.md, AGENTS.md, LICENSE
 .github/workflows/website.yml   the manual deploy workflow (step 4)
+tools/                          checks and capture tools (not deployed; see AGENTS.md)
 site/                           everything that's deployed
   index.html                  the page (all copy and links)
   styles.css, main.js         design and the small amount of script (download button, hero loop, motion)
@@ -17,10 +18,10 @@ site/                           everything that's deployed
   assets/video/               the hero's recorded run: dark and light, AV1 WebM and H.264 MP4, two sizes
 ```
 
-Preview it locally from the repository root, then open <http://localhost:8080>:
+Preview it locally from the repository root, then open <http://127.0.0.1:8781>:
 
 ```powershell
-python -m http.server 8080 --directory site
+python -m http.server 8781 --bind 127.0.0.1 --directory site
 ```
 
 ## 1. Set the site URL
@@ -60,7 +61,8 @@ question, so their answers and diagrams differ.
   `blob:` media. If no format decodes, the still stays.
 - To replace it, keep the file names: `assets/video/hero-{dark,light}-{1980,1320}.{webm,mp4}` at
   1980×1290 and 1320×860, plus matching stills. The current files were encoded with SVT-AV1
-  (`-crf 38`) and x264 (`-crf 27`), BT.709 limited range.
+  (`-crf 38`) and x264 (`-crf 27`), BT.709 limited range. [`tools/capture`](tools/capture/README.md)
+  records, cuts and encodes a new one.
 
 A narrated demo can be linked from the hero later; nothing on the page waits for it.
 
@@ -213,4 +215,5 @@ record pointing at the static web app. It offers only .com, .net, .org, .biz, .c
   isolated profile ("Alex" is a placeholder user). The runs are real, with GPT-6 Luna: the hero loop
   investigates a slowdown in a small sample API (`checkout-api`), and the steps shown under "Hand it a task"
   come from fixing a bug in another sample repository (`weather-cli`); the other chats are seeded
-  examples. They contain no real chats, accounts or paths.
+  examples. They contain no real chats, accounts or paths. [`tools/capture`](tools/capture/README.md) has
+  the sample projects, the profile and the steps to capture them again.

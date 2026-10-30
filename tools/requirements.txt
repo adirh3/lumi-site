@@ -1,0 +1,7 @@
+# Tools only; the site itself has no build step or dependencies.
+# The browser checks use the installed Microsoft Edge (channel "msedge"), so no Playwright browser download is needed.
+playwright
+axe-playwright-python
+pillow
+numpy
+openpyxl

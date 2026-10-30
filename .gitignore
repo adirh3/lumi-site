@@ -1,0 +1,4 @@
+# Scratch output of the tools (screenshots, OCR text, frames)
+tools/.out/
+__pycache__/
+*.pyc
