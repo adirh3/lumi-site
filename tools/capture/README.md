@@ -21,9 +21,9 @@ for the hero loop (both themes); the screenshots take less.
   it out.
 - Keep working files outside the repo (a take is gigabytes), and delete them, the samples and the profiles when done.
 
-The commands below name Avalonia MCP tools (`set_property`, `click_control`, `scroll`, `input_text`, … with your
-Lumi's PID) and one `lumi-mcp` tool, `lumi_open_chat` (with `targetProcessId`). The transcript's scroller is
-`#PART_TranscriptScroll`; `#Transcript` resolves to an empty inner scroller.
+The commands below name Avalonia MCP tools (`set_property`, `click_control`, `scroll`, `input_text`, …; a global
+connector in Lumi) with your Lumi's PID, and Lumi's UI Automation tools (`ui_find`, `ui_do`) with its window,
+`hwnd:0x…`. The transcript's scroller is `#PART_TranscriptScroll`; `#Transcript` resolves to an empty inner scroller.
 
 ## Set up
 
@@ -34,9 +34,9 @@ python tools/capture/seed_profile.py $profile $demo         # add --light for th
 tools/capture/launch.ps1 -Exe <worktree>\src\Lumi\bin\Debug\<tfm>\win-x64\Lumi.exe -Profile $profile
 ```
 
-`launch.ps1` prints `PID=… HWND=…`, which the other tools take. Each theme is its own profile and its own Lumi. A
-real run can change its sample (the bug fix edits weather-cli), so close Lumi and run `make_samples.py` again before
-the next real run.
+`launch.ps1` prints `PID=… HWND=…` (and the `hwnd:0x…` form), which the other tools take. Each theme is its own
+profile and its own Lumi. A real run can change its sample (the bug fix edits weather-cli), so close Lumi and run
+`make_samples.py` again before the next real run.
 
 ## The hero loop
 
@@ -100,7 +100,7 @@ crop; `--crop=x0,y0,x1,y1` overrides it). Update the image's `alt` text in `inde
 | Image | Section of the page | How to get there |
 |---|---|---|
 | `work` | Hand it a task. See every step. | A real run, below |
-| `files` | Your files, documents and the web. | `lumi_open_chat` "October expenses from receipts", then `scroll #PART_TranscriptScroll edge=top` |
+| `files` | Your files, documents and the web. | On the launchpad, open "October expenses from receipts" (`ui_do` click on it), then `scroll #PART_TranscriptScroll edge=top` |
 | `customize` | Shape it around how you work. | `click_control #NavCustomize`, then `click_control #CustomizeSkillsTab` |
 | `phone` | Check in from your phone. | The mobile app's design preview, below |
 | `accounts` | A free app. Your AI account. | `click_control #NavSettings`, `set_property #SettingsPagesList SelectedIndex 6` (AI & Models), `click_control #AddAiAccountButton`; close it afterwards with `set_property #EasyConnectDialog IsDialogOpen false` |

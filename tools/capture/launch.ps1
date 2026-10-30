@@ -33,4 +33,4 @@ Start-Sleep 3
 [void][LumiStage]::ShowWindow($h, 4)   # restore without activating
 # The outer size adds the window frame, so the client area is exactly Width x Height.
 foreach ($i in 1..2) { [void][LumiStage]::SetWindowPos($h, [IntPtr]1, $x, $y, $Width + 16, $Height + 8, 0x0010); Start-Sleep 1 }
-"PID=$($p.Id) HWND=$h"
+"PID=$($p.Id) HWND=$h (hwnd:0x$('{0:X}' -f [int64]$h) for the UI Automation tools)"
