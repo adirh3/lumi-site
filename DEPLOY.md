@@ -11,7 +11,7 @@ site/                           everything that's deployed
   index.html                  the page (all copy and links)
   styles.css, main.js         design and the small amount of script (download button, hero loop, motion)
   staticwebapp.config.json    Azure Static Web Apps headers (CSP and security headers), caching, MIME types
-  site.webmanifest, robots.txt
+  site.webmanifest, robots.txt, sitemap.xml
   assets/img/                 screenshots, WebP in dark and light at several widths
   assets/og/lumi-og.png       1280×640 social image (Open Graph, X, GitHub social preview)
   assets/icons/               favicon, touch icon, Lumi marks
@@ -26,16 +26,18 @@ python -m http.server 8781 --bind 127.0.0.1 --directory site
 
 ## 1. Set the site URL
 
-The site lives at `https://letlumi.com` (registered at Porkbun, which also hosts its DNS). The address
-appears only in the **SITE URL** block at the top of `index.html` (canonical link, `og:url`, `og:image`,
-`twitter:image`); social networks need those to be absolute. To move the site to another address,
-replace it there, for example:
+The site lives at `https://letlumi.com` (registered at Porkbun, which also hosts its DNS). Homepage URL
+metadata and the `WebSite`/`SoftwareApplication` JSON-LD are in the **SITE URL** block at the top of
+`index.html`. `robots.txt` points to `sitemap.xml`, which lists the canonical homepage. Keep those URLs
+and the website's `alternateName` together when moving to another HTTPS domain, for example:
 
 ```powershell
-$domain = 'https://new.example'   # the new address, without a trailing slash
-(Get-Content site\index.html -Raw).Replace('https://letlumi.com', $domain) |
-  Set-Content site\index.html -NoNewline -Encoding utf8
-Select-String -Path site\index.html -Pattern 'letlumi\.com'   # should print nothing
+$hostname = 'new.example'
+foreach ($file in 'site\index.html', 'site\robots.txt', 'site\sitemap.xml') {
+  (Get-Content $file -Raw).Replace('letlumi.com', $hostname) |
+    Set-Content $file -NoNewline -Encoding utf8
+}
+Select-String -Path site\index.html, site\robots.txt, site\sitemap.xml -Pattern 'letlumi\.com'   # should print nothing
 ```
 
 ## 2. The hero loop
@@ -199,6 +201,12 @@ record pointing at the static web app. It offers only .com, .net, .org, .biz, .c
    `gh repo edit adirh3/lumi-site --homepage https://<your-domain>`
 4. Optional: use `site/assets/og/lumi-og.png` (1280×640) as Lumi's social preview on GitHub
    (Lumi repository → Settings → General → Social preview → Edit → Upload an image).
+5. After the sitemap is deployed and returns 200 with an XML content type, submit
+   `https://letlumi.com/sitemap.xml` in Google Search Console and Bing Webmaster Tools. Use their URL
+   inspection tools to check the homepage's crawl and index status; a successful sitemap submission
+   doesn't guarantee indexing. Search Console's site ownership verification needs no analytics or cookies.
+   Keep Google's verification TXT record in DNS and Bing's `msvalidate.01` meta tag in the homepage
+   after ownership is verified. The meta tag is public verification metadata, not a deployment credential.
 
 ## Notes
 

@@ -12,7 +12,7 @@ site = pathlib.Path(__file__).resolve().parents[1] / "site"
 config = json.loads((site / "staticwebapp.config.json").read_text(encoding="utf-8"))
 expected_global = config["globalHeaders"]
 mime = {".html": "text/html", ".css": "text/css", ".js": "javascript", ".svg": "image/svg+xml",
-        ".png": "image/png", ".ico": "image/", ".txt": "text/plain", **config["mimeTypes"]}
+        ".png": "image/png", ".ico": "image/", ".txt": "text/plain", ".xml": "xml", **config["mimeTypes"]}
 
 
 def fetch(path, headers=None, method="GET"):
@@ -35,7 +35,7 @@ for f in sorted(p for p in site.rglob("*") if p.is_file()):
         problems.append(f"{rel}: HTTP {status}")
         continue
     local = f.read_bytes()
-    if f.suffix in (".txt", ".webmanifest", ".html", ".css", ".js", ".svg", ".json"):
+    if f.suffix in (".txt", ".webmanifest", ".html", ".css", ".js", ".svg", ".json", ".xml"):
         body, local = body.replace(b"\r\n", b"\n"), local.replace(b"\r\n", b"\n")
     if hashlib.sha256(body).digest() != hashlib.sha256(local).digest():
         problems.append(f"{rel}: content differs from local file ({len(body)} vs {len(local)} bytes)")

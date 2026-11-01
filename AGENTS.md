@@ -22,6 +22,7 @@ Lumi project's instructions, never in this repo.
 
 ```text
 site/index.html               the whole page: hero, four features, AI accounts, downloads, FAQ, final call to action
+site/robots.txt, sitemap.xml   crawl permissions and the canonical page list
 site/styles.css               design tokens at the top (dark default, light via prefers-color-scheme), then sections
 site/main.js                  download detection, the hero loop, the mark's motion, reveal-on-scroll, the top bar
 site/staticwebapp.config.json CSP and security headers, caching, MIME types (Azure reads it; it isn't served)
@@ -30,8 +31,10 @@ tools/                        checks (validate, check_deploy, scan_public), imag
 .github/workflows/website.yml the deploy workflow
 ```
 
-- The site's address appears only in the **SITE URL** block at the top of `index.html` (canonical, `og:url`,
-  `og:image`, `twitter:image`).
+- Homepage URL metadata and the `WebSite`/`SoftwareApplication` JSON-LD live in the **SITE URL** block at the top of
+  `index.html`. Keep their address and the site's `alternateName` in sync with `robots.txt` and `sitemap.xml`.
+  The sitemap lists only canonical pages, not section fragments, downloads or asset files. Only add `lastmod`
+  when it reflects a real content change; structured data must match visible copy and never invent ratings.
 - `main.js`: `TARGETS` (label, note and link per build) and `PLATFORM` (build → card) drive the Download button,
   the hero's platform links and the highlighted choice in each download card. The hero loop fetches its video once
   and plays it from a `blob:` URL, pauses off screen, and offers a Play button instead of autoplaying when the

@@ -84,6 +84,7 @@ with sync_playwright() as p:
         print(f"{name}: download '{label.strip()}' | hero loop {'playing' if playing else 'NOT playing'} | "
               f"{'OK' if not issues else str(len(issues)) + ' problem(s)'}")
         problems += [f"{name}: {i}" for i in issues]
+        page.unroute_all(behavior="wait")
         ctx.close()
 
     axe = Axe()
@@ -102,6 +103,7 @@ with sync_playwright() as p:
         for v in violations:
             nodes = "; ".join(str(n["target"]) for n in v["nodes"][:4])
             problems.append(f"axe {scheme} {w}px [{v['impact']}] {v['id']}: {v['help']} -> {nodes}")
+        page.unroute_all(behavior="wait")
         ctx.close()
     browser.close()
 
