@@ -45,8 +45,9 @@ tools/                        checks (validate, check_deploy, scan_public), imag
   notes. Calm, confident and concise; no hype.
 - No invented numbers, testimonials, logos, "first/only" claims or performance comparisons. No Microsoft affiliation
   or endorsement. Don't mention colleagues' use.
-- Wording: the app is **Lumi** (never "LetLumi"), "an open-source AI assistant" (as in Lumi's README), and the
-  tagline is **"Let Lumi do the work."** (it matches letlumi.com).
+- Wording: the app is **Lumi** (never "LetLumi"). Define it as **"Lumi is the open-source agent for your desktop.
+  It works with the AI you already have."** Use "agent", not "assistant" or "workspace", as the product category.
+  The tagline is **"Let Lumi do the work."** (it matches letlumi.com).
 - Cost honesty: Lumi is free and open source (MIT); the AI comes from the account the user connects (GitHub Copilot,
   a ChatGPT plan, API providers, local models), with that provider's plans, limits and charges. Never imply free AI.
 - Approvals: Full access is the default, Ask first is available, and approval isn't a sandbox. The phone is a

@@ -88,6 +88,10 @@ the launchpad, and plays the work and the answer sped up. Dark and light are two
    ```
    Update the hero's `alt` text in `index.html` if the answers' facts changed (it describes both themes), then
    follow AGENTS.md: validate, scan with `--ocr`, commit, deploy.
+   For a social-image copy change without new captures, use
+   `python tools/capture/build_stills.py --og-only <lumi repo>`. It reuses the existing dark hero still, leaves the
+   hero media untouched and keeps the social image at 1280x640. Update the image alt text in `index.html` to match.
+   GitHub social previews are separate uploads: re-upload the image there if it was used previously.
 7. **Clean up:** stop your Lumi by PID (`stage_window.py $hwnd park` first if you keep it), and delete the takes,
    loops, samples and profiles.
 
@@ -103,7 +107,7 @@ crop; `--crop=x0,y0,x1,y1` overrides it). Update the image's `alt` text in `inde
 | `files` | Your files, documents and the web. | On the launchpad, open "October expenses from receipts" (`ui_do` click on it), then `scroll #PART_TranscriptScroll edge=top` |
 | `customize` | Shape it around how you work. | `click_control #NavCustomize`, then `click_control #CustomizeSkillsTab` |
 | `phone` | Check in from your phone. | The mobile app's design preview, below |
-| `accounts` | A free app. Your AI account. | `click_control #NavSettings`, `set_property #SettingsPagesList SelectedIndex 6` (AI & Models), `click_control #AddAiAccountButton`; close it afterwards with `set_property #EasyConnectDialog IsDialogOpen false` |
+| `accounts` | Works with the AI you already have. | `click_control #NavSettings`, `set_property #SettingsPagesList SelectedIndex 6` (AI & Models), `click_control #AddAiAccountButton`; close it afterwards with `set_property #EasyConnectDialog IsDialogOpen false` |
 
 **work:** in a new chat in weather-cli (`set_property #Composer ProjectName "weather-cli"`), send with
 `input_text #Composer` and `pressEnter: true`:

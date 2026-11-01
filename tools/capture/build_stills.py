@@ -3,18 +3,31 @@
 usage: python tools/capture/build_stills.py <dark_loop_dir> <light_loop_dir> <lumi_repo>
   *_loop_dir  frame folders written by make_loop.py (00001.jpg is the still)
   lumi_repo   a checkout of adirh3/Lumi, for the Inter fonts and the app icon
+       python tools/capture/build_stills.py --og-only <lumi_repo>
+  --og-only   rebuild only the social image, using the existing 1980-wide dark hero still
 """
-import sys
+import argparse
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
-if len(sys.argv) < 4:
-    sys.exit(__doc__)
-REPO = Path(sys.argv[3])
+parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+parser.add_argument("dark_loop_dir", type=Path, nargs="?")
+parser.add_argument("light_loop_dir", type=Path, nargs="?")
+parser.add_argument("lumi_repo", type=Path, nargs="?")
+parser.add_argument("--og-only", type=Path, metavar="lumi_repo", help="rebuild only the social image from the saved hero still")
+args = parser.parse_args()
+paths = (args.dark_loop_dir, args.light_loop_dir, args.lumi_repo)
+if args.og_only:
+    if any(paths):
+        parser.error("--og-only cannot be combined with loop folders or a positional lumi_repo")
+elif not all(paths):
+    parser.error("provide dark_loop_dir, light_loop_dir and lumi_repo, or --og-only lumi_repo")
+
+REPO = args.og_only or args.lumi_repo
 SITE = Path(__file__).resolve().parents[2] / "site"
 IMG = SITE / "assets" / "img"
-LOOPS = {"dark": Path(sys.argv[1]), "light": Path(sys.argv[2])}
+LOOPS = {"dark": args.dark_loop_dir, "light": args.light_loop_dir}
 
 
 def rounded(im, radius):
@@ -59,7 +72,8 @@ def build_og():
     glow(canvas, (760, 660), 300, (244, 114, 182), 60)
 
     # The chat area of the loop's first frame: the header, the answer and its chart.
-    frame = Image.open(LOOPS["dark"] / "00001.jpg").convert("RGB")
+    source = IMG / "hero-dark-1980.webp" if args.og_only else LOOPS["dark"] / "00001.jpg"
+    frame = Image.open(source).convert("RGB")
     shot = frame.crop((436, 64, 1966, 872))
     shot = shot.resize((700, round(shot.height * 700 / shot.width)), Image.LANCZOS)
     shot = rounded(shot, 20)
@@ -83,10 +97,10 @@ def build_og():
     tagline = ImageFont.truetype(str(fonts / "Inter-SemiBold.ttf"), size)
     d.text((74, 356), "Let Lumi do the work.", font=tagline, fill=(244, 244, 247, 255))
     small = ImageFont.truetype(str(fonts / "Inter-Regular.ttf"), 27)
-    y = 418
-    for line in ("The open-source AI assistant", "for your code, files", "and browser."):
+    y = 410
+    for line in ("The open-source agent", "for your desktop.", "It works with the AI", "you already have."):
         d.text((74, y), line, font=small, fill=(200, 200, 214, 255))
-        y += 36
+        y += 32
     d.text((74, 548), "Windows  ·  macOS  ·  Linux", font=semi, fill=(165, 180, 252, 255))
 
     og = canvas.convert("RGB")
@@ -96,6 +110,7 @@ def build_og():
 
 
 if __name__ == "__main__":
-    for line in build_stills():
-        print(line)
+    if not args.og_only:
+        for line in build_stills():
+            print(line)
     print(build_og())

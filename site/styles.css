@@ -444,7 +444,15 @@ p {
   text-wrap: balance;
 }
 
-.lead a {
+.hero-accounts {
+  max-width: 720px;
+  margin-top: 12px;
+  color: var(--text-on-glow);
+  font-size: 17px;
+  text-wrap: balance;
+}
+
+.hero-accounts a {
   color: inherit;
 }
 

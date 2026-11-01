@@ -15,7 +15,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from axe_playwright_python.sync_playwright import Axe
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import TimeoutError, sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 URL = next((a for a in sys.argv[1:] if not a.startswith("--")), "http://127.0.0.1:8781/")
@@ -63,9 +63,10 @@ with sync_playwright() as p:
         no_alt = page.evaluate("[...document.images].filter(i => !i.hasAttribute('alt')).map(i => i.src)")
         page.locator("[data-hero-loop]").scroll_into_view_if_needed()
         try:
-            page.wait_for_function("document.querySelector('[data-hero-loop]').classList.contains('is-playing')", timeout=8000)
+            # Selector waits work under the production CSP without unsafe-eval.
+            page.locator("[data-hero-loop].is-playing").wait_for(state="visible", timeout=8000)
             playing = page.evaluate("(() => { const v = document.querySelector('[data-hero-loop] video'); return !!v && !v.paused; })()")
-        except Exception:
+        except TimeoutError:
             playing = False
         if SHOTS:
             page.evaluate(REVEAL_ALL)
